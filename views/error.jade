@@ -1,0 +1,10 @@
+extends layout
+
+block content
+	div.row
+		div.small-12.columns
+			h1= error.status
+			h2= message
+			p Looks like you've found a broken link
+			a(class='button radius' href='/') Home
+			pre #{error.stack}
