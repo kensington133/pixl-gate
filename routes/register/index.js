@@ -1,10 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
+/* GET register page. */
 router.get('/register', function(req, res) {
-  // res.render('index', { title: 'Express' });
-  	res.send('Register page yo!');
+  res.render('register/index', { title: 'Register | Pixl Gate' });
 });
 
 module.exports = router;

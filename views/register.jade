@@ -1,0 +1,24 @@
+extends layout
+
+block content
+
+	div.row
+		div.small-12.columns
+			h1 Register
+
+	div.row
+		div.small-12.columns
+			form(method='POST')
+				div.row
+					div.large-6.medium-6.small-12.columns
+						div.row
+							div.small-3.columns
+								label(for="right-label" class="right inline") Label
+							div.small-9.columns
+								input(type="text" id="right-label" placeholder="Inline Text Input")
+					div.large-6.medium-6.small-12.columns
+						div.row
+							div.small-3.columns
+								label(for="right-label" class="right inline") Label
+							div.small-9.columns
+								input(type="text" id="right-label" placeholder="Inline Text Input")
