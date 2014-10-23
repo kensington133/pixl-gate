@@ -35,15 +35,21 @@ block content
 									small.error Your email must be a valid address
 
 							div.input-wrapper
-								label(for='pwd1') Password #[small.red *Required]
-									input(type="password" name="pwd1" id="pwd1" placeholder="Password" required pattern="[a-zA-Z0-9]{6,}")
+								label(for='password') Password #[small.red *Required]
+									input(type="password" name="password" id="password" placeholder="Password" required pattern="[a-zA-Z0-9]{6,}")
 									small.error Your password must be greater than 6 characters long
 
 							div.input-wrapper
-								label(for='pwd2') Password #[small.red *Required]
-									input(type="password" name="pwd1" id="pwd1" placeholder="Password" required pattern="[a-zA-Z0-9]{6,}" data-equalto="pwd1")
+								label(for='password2') Password #[small.red *Required]
+									input(type="password" name="password2" id="password2" placeholder="Password" required pattern="[a-zA-Z0-9]{6,}" data-equalto="password")
 									small.error Your passwords do not match!
+
+							- var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+							input(type='hidden' name='created' value='#{date}')
 
 							input(type="submit" class='button expand radius' value='Go!')
 			else
-				h3 Form Submitted!
+				h3 Thank You #{name}
+
+				p You have been succesfully registered.
+				p Now you can #[a(class='button radius tiny' href='/login') Log In]

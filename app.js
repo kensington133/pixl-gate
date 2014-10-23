@@ -4,7 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-// var mysql = require('mysql');
+var hash = require('password-hash');
 
 var connection = require('./mysql.js');
 
@@ -39,17 +39,20 @@ app.get('/register', function(req, res) {
 
 /* Register Page. */
 app.post('/register', function(req, res) {
+
     if(connection) {
+        delete req.body.password2;
+        req.body.password = hash.generate(req.body.password);
+        console.log(req.body);
+        connection.query('INSERT INTO `users_table` SET ?', req.body ,function(err, result) {
+        if(err) { throw err; }
 
-        connection.query('SELECT * FROM users_table', function(err, rows, fields) {
-            if(err) { throw err; }
-
-            console.warn('The solution is: ' + rows[0].solution);
+            console.log('Result: '+result);
         });
     } else {
-        console.warn('Err: No Connection to MySQL Database');
-        res.render('register', { title: 'Register | Pixl Gate', showForm: false });
+        console.error('Err: No Connection to MySQL Database');
     }
+    res.render('register', { title: 'Register | Pixl Gate', showForm: false, name: req.body.fname +' '+ req.body.sname });
 });
 
 /* User Page */

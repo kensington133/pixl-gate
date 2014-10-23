@@ -3,9 +3,8 @@ var mysql = require('mysql');
 var connection = mysql.createConnection({
 	host     : 'localhost',
 	user     : 'pixl-admin',
-	password : 'QD3ULVTbCerZ8C9e',
-	database : 'pixl-gate',
-	port : '8888'
+	password : 'testing123',
+	database : 'pixl_gate'
 });
 
 connection.connect(function(err) {
