@@ -5,20 +5,45 @@ block content
 	div.row
 		div.small-12.columns
 			h1 Register
-
+			hr
 	div.row
 		div.small-12.columns
-			form(method='POST')
-				div.row
-					div.large-6.medium-6.small-12.columns
-						div.row
-							div.small-3.columns
-								label(for="right-label" class="right inline") Label
-							div.small-9.columns
-								input(type="text" id="right-label" placeholder="Inline Text Input")
-					div.large-6.medium-6.small-12.columns
-						div.row
-							div.small-3.columns
-								label(for="right-label" class="right inline") Label
-							div.small-9.columns
-								input(type="text" id="right-label" placeholder="Inline Text Input")
+			if showForm
+				form(method='POST' data-abide)
+					div.row
+						div.large-6.medium-6.small-12.columns.text-center
+							p Please fill out the form to begin your adventure in Pixl Gate!
+							p We won't send any of your information to a third party and promise to keep it a secret.
+
+							img(src="http://placehold.it/300x200&text=Logo" )
+
+						div.large-6.medium-6.small-12.columns
+
+							div.input-wrapper
+								label(for="fname") First Name #[small.red *Required]
+									input(type="text" name='fname' id='fname' placeholder="e.g. Rick" required pattern="[a-zA-Z]+")
+									small.error Your first name is required and must contain letters only
+
+							div.input-wrapper
+								label(for="sname") Last Name #[small.red *Required]
+									input(type="text" name='sname' id="sname" placeholder="e.g. Astley" required pattern="[a-zA-Z]+")
+									small.error Your last name is required and must contain letters only
+
+							div.input-wrapper
+								label(for='email') Email Address #[small.red *Required]
+									input(type="email" name='email' id='email' placeholder='e.g. rick123@gmail.com' required)
+									small.error Your email must be a valid address
+
+							div.input-wrapper
+								label(for='pwd1') Password #[small.red *Required]
+									input(type="password" name="pwd1" id="pwd1" placeholder="Password" required pattern="[a-zA-Z0-9]{6,}")
+									small.error Your password must be greater than 6 characters long
+
+							div.input-wrapper
+								label(for='pwd2') Password #[small.red *Required]
+									input(type="password" name="pwd1" id="pwd1" placeholder="Password" required pattern="[a-zA-Z0-9]{6,}" data-equalto="pwd1")
+									small.error Your passwords do not match!
+
+							input(type="submit" class='button expand radius' value='Go!')
+			else
+				h3 Form Submitted!

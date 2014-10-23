@@ -7,7 +7,12 @@ div.contain-to-grid
 
 		section(class="top-bar-section")
 			ul(class="right")
-				li(class="active"): a(href="/register") Register
+				li(class="has-form")
+					if loggedIn
+						a(href="/logout" class="button radius") Logout
+					else
+						a(href="/login" class="button radius") Login
+				li: a(href="/register") Register
 				li(class="has-dropdown")
 					a(href="#") Right Button Dropdown
 					ul(class="dropdown")

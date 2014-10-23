@@ -4065,8 +4065,8 @@ input[type="time"]:focus,
 input[type="url"]:focus,
 input[type="color"]:focus,
 textarea:focus {
-  box-shadow: 0 0 5px #999999;
-  border-color: #999999;
+  box-shadow: 0 0 5px #00dbd5;
+  border-color: #00dbd5;
 }
 /* line 132, ../bower_components/foundation/scss/foundation/components/_forms.scss */
 input[type="text"]:focus,
@@ -4085,7 +4085,7 @@ input[type="url"]:focus,
 input[type="color"]:focus,
 textarea:focus {
   background: #fafafa;
-  border-color: #999999;
+  border-color: #00dbd5;
   outline: none;
 }
 /* line 138, ../bower_components/foundation/scss/foundation/components/_forms.scss */
@@ -4291,7 +4291,7 @@ select.radius {
 /* line 349, ../bower_components/foundation/scss/foundation/components/_forms.scss */
 select:hover {
   background-color: #f3f3f3;
-  border-color: #999999;
+  border-color: #00dbd5;
 }
 /* line 354, ../bower_components/foundation/scss/foundation/components/_forms.scss */
 select:disabled {
@@ -9059,4 +9059,8 @@ th.hide-for-touch {
   th.show-for-print {
     display: table-cell !important;
   }
+}
+/* line 1, ../scss/_custom.scss */
+.red {
+  color: #df0000;
 }

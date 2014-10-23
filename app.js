@@ -4,6 +4,12 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+// var mysql = require('mysql');
+
+var connection = require('./mysql.js');
+
+// var passport = require('passport');
+// var FacebookStrategy = require('passport-facebook').Strategy;
 
 var app = express();
 
@@ -21,14 +27,34 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //ROUTING
 
-/* GET home page. */
+/* Home Page. */
 app.get('/', function(req, res) {
   res.render('index', { title: 'Welcome | Pixl Gate' });
 });
 
-/* GET register page. */
+/* Register Page. */
 app.get('/register', function(req, res) {
-  res.render('register', { title: 'Register | Pixl Gate' });
+  res.render('register', { title: 'Register | Pixl Gate', showForm: true });
+});
+
+/* Register Page. */
+app.post('/register', function(req, res) {
+    if(connection) {
+
+        connection.query('SELECT * FROM users_table', function(err, rows, fields) {
+            if(err) { throw err; }
+
+            console.warn('The solution is: ' + rows[0].solution);
+        });
+    } else {
+        console.warn('Err: No Connection to MySQL Database');
+        res.render('register', { title: 'Register | Pixl Gate', showForm: false });
+    }
+});
+
+/* User Page */
+app.get('/user', function(req, res){
+    res.render('user', { title: 'User Area | Pixl Gate' });
 });
 
 // catch 404 and forward to error handler
@@ -61,6 +87,5 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
-
 
 module.exports = app;
