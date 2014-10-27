@@ -2,23 +2,28 @@ div.contain-to-grid
 	nav(class="top-bar" data-topbar role="navigation")
 		ul(class="title-area")
 			li(class="name")
-				h1: a(href="/") Home
+				if session.isLoggedIn
+					h1: a(href="/user") Home
+				else
+					h1: a(href="/") Home
 			li(class="toggle-topbar menu-icon"): a(href="#"): span Menu
 
 		section(class="top-bar-section")
 			ul(class="right")
 				li.divider
+				if !session.isLoggedIn
+					li.divider
+					li: a(href="/register") Register
+				li.divider
+				li(class="has-dropdown")
+					a(href="#") User
+					ul(class="dropdown")
+						li: a(href="/user") User Area
+						li: a(href="/user/reset") Password Reset
+				li.divider
 				li(class="has-form")
-					if loggedIn
+					if session.isLoggedIn
 						a(href="/logout" class="button radius") Logout
 					else
 						a(href="/login" class="button radius") Login
-				li.divider
-				li: a(href="/register") Register
-				li.divider
-				li(class="has-dropdown")
-					a(href="#") Right Button Dropdown
-					ul(class="dropdown")
-						li: a(href="#") First link in dropdown
-						li(class="active"): a(href="#") Active link in dropdown
 				li.divider

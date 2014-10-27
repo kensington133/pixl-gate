@@ -3,6 +3,7 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+var session = require('express-session');
 var bodyParser = require('body-parser');
 var hash = require('password-hash');
 
@@ -23,9 +24,16 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({secret: 'pixl-gate'}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 //ROUTING
+/* Allowing access to session variables in templates */
+app.use(function(req,res,next){
+    res.locals.session = req.session;
+    console.log(session.isLoggedIn);
+    next();
+});
 
 /* Home Page. */
 app.get('/', function(req, res) {
@@ -41,23 +49,59 @@ app.get('/register', function(req, res) {
 app.post('/register', function(req, res) {
 
     if(connection) {
+        //remove second password - not needed
         delete req.body.password2;
+        //hash the password using the password-hash node module
         req.body.password = hash.generate(req.body.password);
-        console.log(req.body);
+        //mysql save user
         connection.query('INSERT INTO `users_table` SET ?', req.body ,function(err, result) {
+        // console.log('Result: '+result);
         if(err) { throw err; }
-
-            console.log('Result: '+result);
         });
     } else {
-        console.error('Err: No Connection to MySQL Database');
+        console.error('Err: No Connection to MySQL Database for Registration Query');
     }
+    //after query - send back to registration page without form
     res.render('register', { title: 'Register | Pixl Gate', showForm: false, name: req.body.fname +' '+ req.body.sname });
+});
+
+/* Login Page */
+app.get('/login', function(req, res){
+    res.render('login', { title: 'Login | Pixl Gate', loginFail: false });
+});
+
+/* Login Page */
+app.post('/login', function(req, res){
+
+    if(connection) {
+        connection.query('SELECT `email`,`password`,`fname`,`sname` FROM `users_table` WHERE email = ' + connection.escape(req.body.email), function(err, result){
+            if(hash.verify(req.body.password, result[0].password)) {
+                req.session.fullName = result[0].fname +' '+ result[0].sname;
+                req.session.firstName = result[0].fname;
+                req.session.lastName = result[0].sname;
+                console.log(result[0].created);
+                req.session.joined = result[0].created;
+                req.session.isLoggedIn = true;
+                res.redirect('/user');
+            } else {
+                res.render('login', {title: 'Login Failed | Pixl Gate', loginFail: true});
+            }
+        });
+    }
 });
 
 /* User Page */
 app.get('/user', function(req, res){
-    res.render('user', { title: 'User Area | Pixl Gate' });
+    if(req.session.isLoggedIn === true) {
+        res.render('user', { title: 'User Area | Pixl Gate' });
+    } else {
+        res.redirect('/login');
+    }
+});
+
+app.get('/logout', function(req, res){
+    req.session.isLoggedIn = false;
+    res.redirect('/login');
 });
 
 // catch 404 and forward to error handler

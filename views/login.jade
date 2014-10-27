@@ -1,0 +1,20 @@
+extends layout
+block content
+	div.row
+		div.large-6.medium-8.small-12.large-centered.medium-centered.columns
+			div.panel
+				if loginFail
+					div(class='alert-box alert radius' data-alert) Error: Unable to login, please check your user name and password and try again.
+						a(href="#" class='close') &times;
+
+				form(method="POST" data-abide)
+					div.input-wrapper
+						label(for="email") Email
+							input(type="email" name='email' id='email' placeholder="Email Address" required)
+							small.error Please provide a valid email address
+					div.input-wrapper
+						label(for="password") Password
+							input(type="password" name='password' id='password' placeholder="Password" required)
+							small.error Please enter your password to log in
+
+					input(type="submit" class='button expand radius' value='Login')

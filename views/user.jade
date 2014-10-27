@@ -3,4 +3,18 @@ extends layout
 block content
 	div.row
 		div.small-12.columns
-			h1= user
+			h1 Welcome, #{session.firstName}
+			hr
+	div.row
+		div.small-12.columns
+			dl(class="tabs" data-tab)
+				dd(class="active"): a(href="#infoPanel") Profile Info
+				dd: a(href="#resetPanel") Password Reset
+				dd: a(href="#gamePanel") Game Info
+			div.tabs-content
+				div(class="content" id="infoPanel")
+					p Joined: #{session.joined}
+				div(class="content" id="resetPanel")
+					p This is the second panel of the basic tab example. This is the second panel of the basic tab example.</p>
+				div(class="content" id="gamePanel")
+					p This is the third panel of the basic tab example. This is the third panel of the basic tab example.</p>
