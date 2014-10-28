@@ -19,7 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `pixl_gate`
 --
-
+CREATE DATABASE IF NOT EXISTS `pixl_gate` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `pixl_gate`;
 -- --------------------------------------------------------
 
 --
