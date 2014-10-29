@@ -36,12 +36,12 @@ app.use(function(req,res,next){
 
 /* Home Page. */
 app.get('/', function(req, res) {
-  res.render('index', { title: 'Welcome | Pixl Gate' });
+  res.render('index', { title: 'Welcome | Pixl Gate', showGame: false });
 });
 
 /* Register Page. */
 app.get('/register', function(req, res) {
-  res.render('register', { title: 'Register | Pixl Gate', showForm: true });
+  res.render('register', { title: 'Register | Pixl Gate', showForm: true, showGame: false });
 });
 
 /* Register Page. */
@@ -61,12 +61,12 @@ app.post('/register', function(req, res) {
         console.error('Err: No Connection to MySQL Database for Registration Query');
     }
     //after query - send back to registration page without form
-    res.render('register', { title: 'Register | Pixl Gate', showForm: false, name: req.body.fname +' '+ req.body.sname });
+    res.render('register', { title: 'Register | Pixl Gate', showForm: false, name: req.body.fname +' '+ req.body.sname, showGame: false });
 });
 
 /* Login Page */
 app.get('/login', function(req, res){
-    res.render('login', { title: 'Login | Pixl Gate', loginFail: false });
+    res.render('login', { title: 'Login | Pixl Gate', loginFail: false, showGame: false });
 });
 
 /* Login Page */
@@ -84,7 +84,7 @@ app.post('/login', function(req, res){
                 req.session.isLoggedIn = true;
                 res.redirect('/user');
             } else {
-                res.render('login', {title: 'Login Failed | Pixl Gate', loginFail: true});
+                res.render('login', {title: 'Login Failed | Pixl Gate', loginFail: true, showGame: false});
             }
         });
     }
@@ -101,7 +101,7 @@ app.get('/user/:path?', function(req, res){
             path = req.params.path
         }
 
-        res.render('user', { title: 'User Area | Pixl Gate', path: path , post: false });
+        res.render('user', { title: 'User Area | Pixl Gate', path: path , post: false, showGame: false });
 
     } else {
         res.redirect('/login');
@@ -117,9 +117,9 @@ app.post('/user/:path?', function(req, res){
             connection.query('UPDATE `users_table` SET password='+ connection.escape(newPassword) +' WHERE `id`='+ req.session.userID +'', function(err, result) {
 
                 if(result.affectedRows === 1){
-                    res.render('user', { title: 'Password Updated | Pixl Gate', path: 'resetpassword', post: true ,updated: true });
+                    res.render('user', { title: 'Password Updated | Pixl Gate', path: 'resetpassword', post: true ,updated: true, showGame: false});
                 } else {
-                    res.render('user', { title: 'Update Failed | Pixl Gate', path: 'resetpassword', post: true, updated: false });
+                    res.render('user', { title: 'Update Failed | Pixl Gate', path: 'resetpassword', post: true, updated: false, showGame: false });
                 }
 
                 if(err) { throw err; }
@@ -136,6 +136,15 @@ app.post('/user/:path?', function(req, res){
 app.get('/logout', function(req, res){
     req.session.isLoggedIn = false;
     res.redirect('/login');
+});
+
+app.get('/play', function(req, res){
+    if(req.session.isLoggedIn === true) {
+       res.render('game', {title: 'Pixl Gate', showGame: true})
+    } else {
+        res.redirect('/login');
+    }
+
 });
 
 // catch 404 and forward to error handler

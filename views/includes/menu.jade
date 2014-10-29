@@ -15,6 +15,9 @@ div.contain-to-grid
 					li.divider
 					li: a(href="/register") Register
 				li.divider
+					if session.isLoggedIn
+						li.active: a(href="/play") Play Pixl Gate
+				li.divider
 				li(class="has-dropdown")
 					a(href="#") User Area
 					ul(class="dropdown")
