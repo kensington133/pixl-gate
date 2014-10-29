@@ -41,7 +41,7 @@ block content
 
 							div.input-wrapper
 								label(for='password2') Password #[small.red *Required]
-									input(type="password" name="password2" id="password2" placeholder="Password" required pattern="[a-zA-Z0-9]{6,}" data-equalto="password")
+									input(type="password" name="password2" id="password2" placeholder="Repeat Password" required pattern="[a-zA-Z0-9]{6,}" data-equalto="password")
 									small.error Your passwords do not match!
 
 							- var date = new Date().toISOString().slice(0, 19).replace('T', ' ');

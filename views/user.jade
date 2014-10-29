@@ -3,8 +3,13 @@ extends layout
 block content
 	div.row
 		div.small-12.columns
-			h1 Welcome, #{session.firstName}
+			h1 Hey #{session.firstName}
 			hr
+
+	div.row
+		div.small-12.columns
+			p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut tincidunt augue. Aliquam imperdiet porttitor arcu nec cursus. Nunc ac sagittis justo, et dictum tortor. Quisque eleifend accumsan mollis. Aliquam eu dolor eget arcu vestibulum auctor lacinia id turpis. Mauris volutpat elit ac odio tincidunt laoreet. Maecenas eu velit sit amet odio tempor ullamcorper. Nam placerat ipsum sit amet quam dapibus tincidunt. Praesent bibendum tortor ante, vitae volutpat metus varius in. Vestibulum sodales, quam in rhoncus volutpat, nibh tortor ultricies urna, sed malesuada arcu sapien vel felis. Donec gravida a leo eget suscipit. In dapibus ornare elementum. Nulla turpis ante, sodales nec suscipit sed, fermentum ut leo. Fusce neque sapien, rhoncus sit amet ex ac, venenatis dictum nisl.
+
 	div.row
 		div.small-12.columns
 
@@ -17,17 +22,31 @@ block content
 
 			div.tabs-content
 				div(id="infoPanel" class=(path=='profileinfo'?'active content':'content'))
-					p Joined: #{session.joined}
+					div.panel
+						p Joined: #{session.joined}
 
 				div(id="resetPanel" class=(path=='resetpassword'?'active content':'content'))
 
-					form(method="POST")
-						div.row.collapse
-							div.small-10.columns
-								input(type="text" placeholder="New Password")
-							div.small-2.columns
-								//- a(href="#" class="button postfix radius") Go
-								input(type="submit" class='button postfix radius' value='Go')
+					if post
+						if updated
+							div(data-alert class="alert-box success radius") Password updated successfully, next time you log in this password will be used.
+								a(href="#" class="close") &times;
+						else
+							div(data-alert class="alert-box alert radius") Unable to update password, please try again.
+								a (href="#" class="close") &times;
+
+					form(method="POST" data-abide)
+						div.input-wrapper
+							label(for='password2') New Password #[small.red *Required]
+								input(type="password" name="password" id='password' placeholder="Must be at least 6 characters long" required pattern="[a-zA-Z0-9]{6,}")
+								small.error Your password must be greater than 6 characters long
+
+						div.input-wrapper
+							label(for='password2') Repeat Password #[small.red *Required]
+								input(type="password" name="password2" id='password2' placeholder="Must be the same as the first one!" required pattern="[a-zA-Z0-9]{6,}" data-equalto="password")
+								small.error Your passwords do not match!
+
+						input(type="submit" class='button postfix radius' value='Update')
 
 				div(id="gamePanel" class=(path=='gameinfo'?'active content':'content'))
 					p Game info panel

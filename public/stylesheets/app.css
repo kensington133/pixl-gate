@@ -6330,7 +6330,7 @@ table tr td {
 /* line 39, ../bower_components/foundation/scss/foundation/components/_tabs.scss */
 .tabs dd > a, .tabs .tab-title > a {
   display: block;
-  background-color: #efefef;
+  background-color: #00dbd5;
   color: #222222;
   padding: 1rem 2rem;
   font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
@@ -6338,12 +6338,12 @@ table tr td {
 }
 /* line 48, ../bower_components/foundation/scss/foundation/components/_tabs.scss */
 .tabs dd > a:hover, .tabs .tab-title > a:hover {
-  background-color: #e1e1e1;
+  background-color: #00cec8;
 }
 /* line 54, ../bower_components/foundation/scss/foundation/components/_tabs.scss */
 .tabs dd.active a, .tabs .tab-title.active a {
-  background-color: white;
-  color: #222222;
+  background-color: #00dbd5;
+  color: white;
 }
 /* line 63, ../bower_components/foundation/scss/foundation/components/_tabs.scss */
 .tabs.radius dd:first-child a, .tabs.radius .tab:first-child a {
@@ -9060,7 +9060,7 @@ th.hide-for-touch {
     display: table-cell !important;
   }
 }
-/* line 1, ../scss/_custom.scss */
-.red {
+/* line 2, ../scss/_custom.scss */
+small .red {
   color: #df0000;
 }

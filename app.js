@@ -73,9 +73,10 @@ app.get('/login', function(req, res){
 app.post('/login', function(req, res){
 
     if(connection) {
-        connection.query('SELECT `email`,`password`,`fname`,`sname`,`created` FROM `users_table` WHERE email = ' + connection.escape(req.body.email), function(err, result){
+        connection.query('SELECT `email`,`password`,`fname`,`sname`,`created`,`id` FROM `users_table` WHERE email = ' + connection.escape(req.body.email), function(err, result){
 
             if(hash.verify(req.body.password, result[0].password)) {
+                req.session.userID = result[0].id;
                 req.session.fullName = result[0].fname +' '+ result[0].sname;
                 req.session.firstName = result[0].fname;
                 req.session.lastName = result[0].sname;
@@ -100,8 +101,33 @@ app.get('/user/:path?', function(req, res){
             path = req.params.path
         }
 
-        res.render('user', { title: 'User Area | Pixl Gate', path: path });
+        res.render('user', { title: 'User Area | Pixl Gate', path: path , post: false });
 
+    } else {
+        res.redirect('/login');
+    }
+});
+
+app.post('/user/:path?', function(req, res){
+    if(req.session.isLoggedIn === true) {
+
+        if(connection) {
+
+            var newPassword = hash.generate(req.body.password);
+            connection.query('UPDATE `users_table` SET password='+ connection.escape(newPassword) +' WHERE `id`='+ req.session.userID +'', function(err, result) {
+
+                if(result.affectedRows === 1){
+                    res.render('user', { title: 'Password Updated | Pixl Gate', path: 'resetpassword', post: true ,updated: true });
+                } else {
+                    res.render('user', { title: 'Update Failed | Pixl Gate', path: 'resetpassword', post: true, updated: false });
+                }
+
+                if(err) { throw err; }
+            });
+
+        } else {
+            console.error('Err: No Connection to MySQL Database for Password Rest Query');
+        }
     } else {
         res.redirect('/login');
     }
@@ -110,7 +136,6 @@ app.get('/user/:path?', function(req, res){
 app.get('/logout', function(req, res){
     req.session.isLoggedIn = false;
     res.redirect('/login');
-    connection.end();
 });
 
 // catch 404 and forward to error handler
