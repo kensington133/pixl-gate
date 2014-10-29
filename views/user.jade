@@ -7,14 +7,27 @@ block content
 			hr
 	div.row
 		div.small-12.columns
+
 			dl(class="tabs" data-tab)
-				dd(class="active"): a(href="#infoPanel") Profile Info
-				dd: a(href="#resetPanel") Password Reset
-				dd: a(href="#gamePanel") Game Info
+				dd(class=(path=='profileinfo'?'active':'')): a(href="#infoPanel") Profile Info
+
+				dd(class=(path=='resetpassword'?'active':'')): a(href="#resetPanel") Password Reset
+
+				dd(class=(path=='gameinfo'?'active':'')): a(href="#gamePanel") Game Info
+
 			div.tabs-content
-				div(class="content" id="infoPanel")
+				div(id="infoPanel" class=(path=='profileinfo'?'active content':'content'))
 					p Joined: #{session.joined}
-				div(class="content" id="resetPanel")
-					p Password reset form here
-				div(class="content" id="gamePanel")
-					p This is the third panel of the basic tab example. This is the third panel of the basic tab example.</p>
+
+				div(id="resetPanel" class=(path=='resetpassword'?'active content':'content'))
+
+					form(method="POST")
+						div.row.collapse
+							div.small-10.columns
+								input(type="text" placeholder="New Password")
+							div.small-2.columns
+								//- a(href="#" class="button postfix radius") Go
+								input(type="submit" class='button postfix radius' value='Go')
+
+				div(id="gamePanel" class=(path=='gameinfo'?'active content':'content'))
+					p Game info panel

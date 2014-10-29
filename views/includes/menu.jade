@@ -16,10 +16,11 @@ div.contain-to-grid
 					li: a(href="/register") Register
 				li.divider
 				li(class="has-dropdown")
-					a(href="#") User
+					a(href="#") User Area
 					ul(class="dropdown")
-						li: a(href="/user") User Area
-						li: a(href="/user/reset") Password Reset
+						li: a(href="/user") User Home
+						li: a(href="/user/resetpassword") Password Reset
+						li: a(href="/user/gameinfo") Game Info
 				li.divider
 				li(class="has-form")
 					if session.isLoggedIn

@@ -31,7 +31,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 /* Allowing access to session variables in templates */
 app.use(function(req,res,next){
     res.locals.session = req.session;
-    console.log(session.isLoggedIn);
     next();
 });
 
@@ -74,13 +73,13 @@ app.get('/login', function(req, res){
 app.post('/login', function(req, res){
 
     if(connection) {
-        connection.query('SELECT `email`,`password`,`fname`,`sname` FROM `users_table` WHERE email = ' + connection.escape(req.body.email), function(err, result){
+        connection.query('SELECT `email`,`password`,`fname`,`sname`,`created` FROM `users_table` WHERE email = ' + connection.escape(req.body.email), function(err, result){
+
             if(hash.verify(req.body.password, result[0].password)) {
                 req.session.fullName = result[0].fname +' '+ result[0].sname;
                 req.session.firstName = result[0].fname;
                 req.session.lastName = result[0].sname;
-                console.log(result[0].created);
-                req.session.joined = result[0].created;
+                req.session.joined = result[0].created.toString().slice(0, 24).replace('T', ' ');
                 req.session.isLoggedIn = true;
                 res.redirect('/user');
             } else {
@@ -91,9 +90,18 @@ app.post('/login', function(req, res){
 });
 
 /* User Page */
-app.get('/user', function(req, res){
+app.get('/user/:path?', function(req, res){
     if(req.session.isLoggedIn === true) {
-        res.render('user', { title: 'User Area | Pixl Gate' });
+
+        var path;
+        if(!req.params.path){
+            path = 'profileinfo';
+        } else {
+            path = req.params.path
+        }
+
+        res.render('user', { title: 'User Area | Pixl Gate', path: path });
+
     } else {
         res.redirect('/login');
     }
@@ -102,6 +110,7 @@ app.get('/user', function(req, res){
 app.get('/logout', function(req, res){
     req.session.isLoggedIn = false;
     res.redirect('/login');
+    connection.end();
 });
 
 // catch 404 and forward to error handler
