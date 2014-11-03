@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var bodyParser = require('body-parser');
 var hash = require('password-hash');
+var mail = require('emailjs');
 
 var connection = require('./mysql.js');
 
@@ -54,7 +55,7 @@ app.post('/register', function(req, res) {
         req.body.password = hash.generate(req.body.password);
         //mysql save user
         connection.query('INSERT INTO `users_table` SET ?', req.body ,function(err, result) {
-        // console.log('Result: '+result);
+
         if(err) { throw err; }
         });
     } else {
@@ -66,6 +67,7 @@ app.post('/register', function(req, res) {
 
 /* Login Page */
 app.get('/login', function(req, res){
+    req.session.attempt = 1;
     res.render('login', { title: 'Login | Pixl Gate', loginFail: false, showGame: false });
 });
 
@@ -74,17 +76,24 @@ app.post('/login', function(req, res){
 
     if(connection) {
         connection.query('SELECT `email`,`password`,`fname`,`sname`,`created`,`id` FROM `users_table` WHERE email = ' + connection.escape(req.body.email), function(err, result){
-
-            if(hash.verify(req.body.password, result[0].password)) {
-                req.session.userID = result[0].id;
-                req.session.fullName = result[0].fname +' '+ result[0].sname;
-                req.session.firstName = result[0].fname;
-                req.session.lastName = result[0].sname;
-                req.session.joined = result[0].created.toString().slice(0, 24).replace('T', ' ');
-                req.session.isLoggedIn = true;
-                res.redirect('/user');
+            console.log(result);
+            if(result.length > 0) {
+                if(hash.verify(req.body.password, result[0].password)) {
+                    req.session.userID = result[0].id;
+                    req.session.fullName = result[0].fname +' '+ result[0].sname;
+                    req.session.firstName = result[0].fname;
+                    req.session.lastName = result[0].sname;
+                    req.session.joined = result[0].created.toString().slice(0, 24).replace('T', ' ');
+                    req.session.isLoggedIn = true;
+                    delete req.session.attempt;
+                    res.redirect('/user');
+                } else {
+                    req.session.attempt++;
+                    res.render('login', {title: 'Login Failed | Pixl Gate', loginFail: true, showGame: false, attempt: req.session.attempt});
+                }
             } else {
-                res.render('login', {title: 'Login Failed | Pixl Gate', loginFail: true, showGame: false});
+                req.session.attempt++;
+                res.render('login', {title: 'Login Failed | Pixl Gate', loginFail: true, showGame: false, attempt: req.session.attempt});
             }
         });
     }
@@ -133,10 +142,15 @@ app.post('/user/:path?', function(req, res){
     }
 });
 
+/* Logout */
 app.get('/logout', function(req, res){
     req.session.isLoggedIn = false;
     res.redirect('/login');
 });
+/* Password Reset */
+/*app.get('reset', function(req, res){
+    res.render('reset', { title: 'Password Reset | Pixl Gate' });
+});*/
 
 app.get('/play', function(req, res){
     if(req.session.isLoggedIn === true) {
