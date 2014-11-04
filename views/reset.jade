@@ -1,0 +1,20 @@
+extends layout
+block content
+	div.row
+		div.large-12.columns
+			h1 Password Reset
+			hr
+
+	div.row
+		div.large-6.medium-6.small-12.columns
+			p Fill out your email address and a password reset email will be sent to the email address you specify.
+			p Please make sure its the email address you registered with to ensure a speedy password recovery.
+
+		div.large-6.medium-6.small-12.columns
+			form(method="POST" data-abide)
+					div.input-wrapper
+						label(for='email') Email Address #[small.red *Required]
+							input(type="email" name="email" id='email' placeholder="The email address used to register for Pixl Gate" required)
+							small.error Please provide a valid email address
+
+					input(type="submit" class='button postfix radius' value='Reset')

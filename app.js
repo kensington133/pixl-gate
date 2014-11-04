@@ -6,9 +6,9 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var bodyParser = require('body-parser');
 var hash = require('password-hash');
-var mail = require('emailjs');
 
 var connection = require('./mysql.js');
+var mailServer = require("./email.js");
 
 // var passport = require('passport');
 // var FacebookStrategy = require('passport-facebook').Strategy;
@@ -103,13 +103,7 @@ app.post('/login', function(req, res){
 app.get('/user/:path?', function(req, res){
     if(req.session.isLoggedIn === true) {
 
-        var path;
-        if(!req.params.path){
-            path = 'profileinfo';
-        } else {
-            path = req.params.path
-        }
-
+        var path = req.params.path || 'profileinfo';
         res.render('user', { title: 'User Area | Pixl Gate', path: path , post: false, showGame: false });
 
     } else {
@@ -147,10 +141,27 @@ app.get('/logout', function(req, res){
     req.session.isLoggedIn = false;
     res.redirect('/login');
 });
+
 /* Password Reset */
-/*app.get('reset', function(req, res){
+app.get('/reset', function(req, res){
+    if(req.session.attempt) {
+        delete req.session.attempt;
+    }
     res.render('reset', { title: 'Password Reset | Pixl Gate' });
-});*/
+});
+
+app.post('/reset', function(req, res){
+    var email = req.body.email;
+    if(email) {
+        var message = {
+            text: "Test reset email!",
+            from: "Pixl Gate <pixl.gate.game@gmail.com>",
+            to: "You <"+email+">",
+            subject: "Pixl Gate - Testing"
+        }
+        mailServer.send(message, function(err, message) { console.log(err || message); });
+    }
+});
 
 app.get('/play', function(req, res){
     if(req.session.isLoggedIn === true) {

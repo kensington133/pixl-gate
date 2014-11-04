@@ -9061,6 +9061,6 @@ th.hide-for-touch {
   }
 }
 /* line 2, ../scss/_custom.scss */
-small .red {
+small.red {
   color: #df0000;
 }
