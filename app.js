@@ -5,13 +5,19 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var bodyParser = require('body-parser');
-var hash = require('password-hash');
+// var hash = require('password-hash');
 
-var connection = require('./mysql.js');
+// var connection = require('./mysql.js');
 var mailServer = require("./email.js");
 
-// var passport = require('passport');
-// var FacebookStrategy = require('passport-facebook').Strategy;
+/*var passport = require('passport');
+var FacebookStrategy = require('passport-facebook').Strategy;
+var config = require('./facebook.js');*/
+
+var indexRoute = require('./routes/index');
+var registerRoute = require('./routes/register');
+var loginRoute = require('./routes/login');
+var userRoute = require('./routes/user');
 
 var app = express();
 
@@ -36,17 +42,22 @@ app.use(function(req,res,next){
 });
 
 /* Home Page. */
-app.get('/', function(req, res) {
+app.use('/', indexRoute);
+app.use('/register', registerRoute);
+app.use('/login', loginRoute);
+app.use('/user/:tab?', userRoute);
+
+/*app.get('/', function(req, res) {
   res.render('index', { title: 'Welcome | Pixl Gate', showGame: false });
-});
+});*/
 
 /* Register Page. */
-app.get('/register', function(req, res) {
+/*app.get('/register', function(req, res) {
   res.render('register', { title: 'Register | Pixl Gate', showForm: true, showGame: false });
-});
+});*/
 
 /* Register Page. */
-app.post('/register', function(req, res) {
+/*app.post('/register', function(req, res) {
 
     if(connection) {
         //remove second password - not needed
@@ -63,16 +74,16 @@ app.post('/register', function(req, res) {
     }
     //after query - send back to registration page without form
     res.render('register', { title: 'Register | Pixl Gate', showForm: false, name: req.body.fname +' '+ req.body.sname, showGame: false });
-});
+});*/
 
 /* Login Page */
-app.get('/login', function(req, res){
+/*app.get('/login', function(req, res){
     req.session.attempt = 1;
     res.render('login', { title: 'Login | Pixl Gate', loginFail: false, showGame: false });
-});
+});*/
 
 /* Login Page */
-app.post('/login', function(req, res){
+/*app.post('/login', function(req, res){
 
     if(connection) {
         connection.query('SELECT `email`,`password`,`fname`,`sname`,`created`,`id` FROM `users_table` WHERE email = ' + connection.escape(req.body.email), function(err, result){
@@ -97,10 +108,10 @@ app.post('/login', function(req, res){
             }
         });
     }
-});
+});*/
 
 /* User Page */
-app.get('/user/:path?', function(req, res){
+/*app.get('/user/:path?', function(req, res){
     if(req.session.isLoggedIn === true) {
 
         var path = req.params.path || 'profileinfo';
@@ -135,7 +146,7 @@ app.post('/user/:path?', function(req, res){
         res.redirect('/login');
     }
 });
-
+*/
 /* Logout */
 app.get('/logout', function(req, res){
     req.session.isLoggedIn = false;
