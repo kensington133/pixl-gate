@@ -4,10 +4,13 @@ var router = express.Router();
 var connection = require('../mysql.js');
 var hash = require('password-hash');
 
-router.get('/', function(req, res){
+router.get('/:tab?', function(req, res){
+
+	console.log(req.params);
+    console.log(req.params.tab);
+
     if(req.session.isLoggedIn === true) {
-    	console.log(req.params.tab);
-        var path = req.params.path || 'profileinfo';
+        var path = req.params.tab || 'profileinfo';
         res.render('user', { title: 'User Area | Pixl Gate', path: path , post: false, showGame: false });
 
     } else {
@@ -15,7 +18,7 @@ router.get('/', function(req, res){
     }
 });
 
-router.post('/', function(req, res){
+router.post('/:tab?', function(req, res){
     if(req.session.isLoggedIn === true) {
 
         if(connection) {

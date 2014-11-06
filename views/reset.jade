@@ -11,6 +11,15 @@ block content
 			p Please make sure its the email address you registered with to ensure a speedy password recovery.
 
 		div.large-6.medium-6.small-12.columns
+
+			if post
+				if sent
+					div(class='alert-box success radius' data-alert) Password reset email sent successfully!
+						a(href="#" class='close') &times;
+				else
+					div(class='alert-box alert radius' data-alert) Unable to send password reset email :(
+						a(href="#" class='close') &times;
+
 			form(method="POST" data-abide)
 					div.input-wrapper
 						label(for='email') Email Address #[small.red *Required]
