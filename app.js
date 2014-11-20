@@ -1,3 +1,4 @@
+//app init
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -6,7 +7,7 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var bodyParser = require('body-parser');
 
-//Including Routes
+//including Routes
 var indexRoute = require('./routes/index');
 var registerRoute = require('./routes/register');
 var loginRoute = require('./routes/login');
@@ -31,12 +32,13 @@ app.use(session({secret: 'pixl-gate'}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 //ROUTING
-/* Allowing access to session variables in templates */
+/* allowing access to session variables in templates */
 app.use(function(req,res,next){
     res.locals.session = req.session;
     next();
 });
 
+/* top level routing */
 app.use('/', indexRoute);
 app.use('/register', registerRoute);
 app.use('/login', loginRoute);

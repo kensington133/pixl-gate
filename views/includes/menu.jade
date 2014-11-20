@@ -13,17 +13,18 @@ div.contain-to-grid
 				li.divider
 				if !session.isLoggedIn
 					li.divider
-					li: a(href="/register") Register
+					li(class="active"): a(href="/register") Register
 				li.divider
 					if session.isLoggedIn
 						li.active: a(href="/play") Play Pixl Gate
-				li.divider
-				li(class="has-dropdown")
-					a(href="/user") User Area
-					ul(class="dropdown")
-						li: a(href="/user") User Home
-						li: a(href="/user/resetpassword") Password Reset
-						li: a(href="/user/gameinfo") Game Info
+				if session.isLoggedIn
+					li.divider
+					li(class="has-dropdown")
+						a(href="/user") User Area
+						ul(class="dropdown")
+							li: a(href="/user") User Home
+							li: a(href="/user/resetpassword") Password Reset
+							li: a(href="/user/gameinfo") Game Info
 				li.divider
 				li(class="has-form")
 					if session.isLoggedIn
